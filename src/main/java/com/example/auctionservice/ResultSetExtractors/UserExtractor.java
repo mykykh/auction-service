@@ -1,7 +1,5 @@
 package com.example.auctionservice.ResultSetExtractors;
 
-import com.example.auctionservice.Models.Privilege;
-import com.example.auctionservice.Models.Role;
 import com.example.auctionservice.Models.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
