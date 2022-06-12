@@ -12,7 +12,7 @@ public class AuctionRepository {
     private final JdbcTemplate jdbcTemplate;
 
     private static final String GET_ALL_QUERY = "SELECT * FROM auctions a, auction_statuses s, categories c WHERE a.status_id = s.status_id AND c.category_id = a.category_id GROUP BY a.auction_id, s.status_id, c.category_id";
-    private static final String GET_ALL_BY_USER_ID_QUERY = "SELECT * FROM auctions a, auction_statuses s WHERE a.status_id = s.status_id AND a.user_id = ? GROUP BY a.auction_id, s.status_id";
+    private static final String GET_ALL_BY_USER_ID_QUERY = "SELECT * FROM auctions a, auction_statuses s, categories c WHERE a.status_id = s.status_id AND c.category_id = a.category_id AND a.user_id = ? GROUP BY a.auction_id, s.status_id, c.category_id";
 
     public AuctionRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

@@ -26,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public String postSingUp(@RequestParam String username, @RequestParam String password) {
+    public String postSignUp(@RequestParam String username, @RequestParam String password) {
         User user = new User();
 
         user.setUsername(username);
@@ -44,6 +44,6 @@ public class AuthController {
 
     @GetMapping("/signup")
     public String getSignUp(){
-        return "signUpView";
+        return "signUp";
     }
 }
