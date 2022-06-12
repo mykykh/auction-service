@@ -6,6 +6,7 @@ import com.example.auctionservice.ResultSetExtractors.UserExtractor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +39,7 @@ public class UserRepository{
         else return Optional.of(users.get(0));
     }
 
+    @Transactional
     public void save(User user) throws DuplicateKeyException{
         jdbcTemplate.update(INSERT_USER_QUERY, user.getUsername(), user.getPassword(), user.isEnabled());
         for (Role role : user.getRoles()){
