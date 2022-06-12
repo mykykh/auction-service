@@ -1,0 +1,4 @@
+spring.datasource.url=jdbc:postgresql://url:port/dbname
+spring.datasource.username=username
+spring.datasource.password=password
+spring.jpa.properties.hibernate.jdbc.time_zone=UTC

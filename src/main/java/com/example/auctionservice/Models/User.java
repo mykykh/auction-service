@@ -4,6 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,8 +14,15 @@ public class User implements UserDetails {
     private long id = 0;
     private String username = "";
     private String password = "";
+
+    private BigDecimal balance;
+
     private boolean enabled = true;
+
     private Collection<Role> roles;
+
+    private Instant updatedTime;
+    private Instant createdTime;
 
     public long getId() {
         return id;
@@ -41,12 +50,36 @@ public class User implements UserDetails {
         this.username = username;
     }
 
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     public Collection<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public Instant getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(Instant updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
+    public Instant getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Instant createdTime) {
+        this.createdTime = createdTime;
     }
 
     @Override
@@ -78,7 +111,7 @@ public class User implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<>();
         List<Privilege> privileges = new ArrayList<>();
         for (Role role: roles){
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
             privileges.addAll(role.getPrivileges());
         }
         for (Privilege privilege: privileges){

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Roles list</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <div class="card m-5 col-12 col-md-4">
+        <div class="card-body">
+            <form method="post" th:action="@{/admin/role/create-role}">
+                <p>
+                    <label for="roleName">Role name:</label>
+                    <br>
+                    <input type="text" id="roleName" name="name" required>
+                </p>
+                <p>
+                    <label th:for="privileges">Select role privileges:</label>
+                    <br>
+                    <select id="privileges" name="privileges" multiple>
+                        <option th:each="privilege: ${existingPrivileges}" th:value="${privilege.id}" th:text="${privilege.name}"></option>
+                    </select>
+                </p>
+                <button class="btn btn-primary" type="submit">Create new role</button>
+            </form>
+        </div>
+    </div>
+    <div class="card m-5 col-12 col-md-4" th:each="role: ${roles}">
+        <div class="card-body">
+            <h3 class="card-title"><a th:text="${role.name}" th:href="@{/admin/role/{id}(id=${role.id})}"></a></h3>
+            <h3>Role privileges:</h3>
+            <div th:each="privilege: ${role.privileges}">
+                <h4 class="card-text"><a th:text="${privilege.name}" th:href="@{/admin/privileges}"></a></h4>
+            </div>
+            <br>
+            <div th:switch="${role.id}">
+                <div th:case="*{1}"><button disabled class="btn btn-danger">Delete role</button></div>
+                <div th:case="*{2}"><button disabled class="btn btn-danger">Delete role</button></div>
+                <div th:case="*">
+                    <form method="post" th:action="@{/admin/role/delete-role}">
+                        <label>
+                            <input type="text" name="id" th:value="${role.id}" hidden>
+                        </label>
+                        <button class="btn btn-danger">Delete role</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+  <meta charset="UTF-8">
+  <title>Auction</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div class="container" th:fragment="auction-info">
+  <div class="row">
+    <div class="col-12">
+      <h1 th:text="${auction.title}"></h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h2 th:text="${auction.description}"></h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <h5>Created by: <a th:text="${auctionOwner.username}" th:href="@{/user/{id}(id=${auctionOwner.id})}"></a></h5>
+    </div>
+    <div class="col-6">
+      <h5>In category: <a th:text="${auction.category.name}" th:href="@{/category/{id}(id=${auction.category.id})}"></a></h5>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+      <p>Last bid submission time: <span th:text="${#dates.format(auction.expirationTime, 'HH:mm dd MMM yyyy')}"></span></p>
+    </div>
+    <div class="col-6">
+      <p>Minimal bid: <span th:text="${minimalBid}"></span></p>
+    </div>
+  </div>
+</div>
+<div class="container" th:fragment="bidCards">
+  <div class="card m-5" th:each="bid: ${bids}">
+    <div class="card-body">
+      <h3 class="card-title" th:text="${bid.amount}"></h3>
+      <h4 class="card-text">Bid Status: <span th:text="${bid.bidStatus.name}"></span></h4>
+      <h5 class="card-text">Bid created: <span th:text="${#dates.format(bid.createdTime, 'HH:mm dd MMM yyyy')}"></span></h5>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

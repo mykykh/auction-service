@@ -1,8 +1,6 @@
 package com.example.auctionservice.Configs;
 
-import com.example.auctionservice.Models.User;
 import com.example.auctionservice.Repositories.UserRepository;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,9 +18,5 @@ public class SecurityUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
-
-    public void createUser(UserDetails user) throws DuplicateKeyException {
-        userRepository.save((User) user);
     }
 }

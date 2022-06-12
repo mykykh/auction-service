@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>auctionCards</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div class="container" th:fragment="auctionCards">
+    <div class="card m-5" th:each="auction: ${auctions}">
+        <div class="card-body">
+            <h3 class="card-title"><a th:text="${auction.title}" th:href="@{/auction/{id}(id=${auction.id})}"></a></h3>
+            <h4 class="card-text" th:text="${auction.description} ?: 'Has no description'"></h4>
+            <p class="card-text">Category: <a th:text="${auction.category.name}" th:href="@{/category/{id}(id=${auction.category.id})}"></a></p>
+            <h5 class="card-text">Last bid submission time: <span th:text="${#dates.format(auction.expirationTime, 'HH:mm dd MMM yyyy')}"></span></h5>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

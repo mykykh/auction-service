@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New auction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 d-flex justify-content-center">
+            <form method="post" th:action="@{/account/create-auction}">
+                <p>
+                    <label for="title">Title:</label>
+                    <br>
+                    <input id="title" th:type="text" name="title" th:minlength="1"  th:maxlength="45" required>
+                </p>
+                <p>
+                    <label for="description">Description:</label>
+                    <br>
+                    <textarea id="description" name="description" rows="5" cols="50"></textarea>
+                </p>
+                <p>
+                    <label for="startingPrice">Starting price:</label>
+                    <br>
+                    <input id="startingPrice" name="startingPrice" th:type="number" step="0.01" required/>
+                </p>
+                <p>
+                    <label for="expirationTime">Expiration time (UTC):</label>
+                    <br>
+                    <input id="expirationTime" name="expirationTime" th:type="datetime-local" required/>
+                </p>
+                <p>
+                    <label for="categoryName">Select category:</label>
+                    <br>
+                    <select id="categoryName" name="categoryName">
+                        <option th:each="category: ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+                    </select>
+                </p>
+                <button class="btn btn-success" type="submit">Create</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User account</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <div class="row"><h1>Account information:</h1></div>
+    <div class="row">
+        <div>
+            <form method="post" th:action="@{/account/update-username}">
+                <p>
+                    <label for="username">Username:</label>
+                    <br>
+                    <input id="username" name="username" th:value="${user.username}" type="text">
+                </p>
+                <button class="btn btn-primary" type="submit">Update</button>
+            </form>
+            <form method="post" th:action="@{/account/update-password}">
+                <p>
+                    <label for="oldPassword">Old password:</label>
+                    <br>
+                    <input id="oldPassword" name="oldPassword" type="password">
+                </p>
+                <p>
+                    <label for="newPassword">New password:</label>
+                    <br>
+                    <input id="newPassword" name="newPassword" type="password">
+                </p>
+                <button class="btn btn-primary" type="submit">Update</button>
+            </form>
+            <h2>Registration time: <span th:text="${#dates.format(user.createdTime, 'HH:mm dd MMM yyyy')}"></span></h2>
+            <div>
+                <h2>Balance: <span th:text="${user.balance}"></span></h2>
+                <form method="post" th:action="@{/account/update-balance}">
+                    <label>
+                        <input name="addToBalance" value="10" type="number">
+                    </label>
+                    <button class="btn btn-primary" type="submit">Add balance</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row"><h1>Account auctions:</h1></div>
+    <div>
+        <a class="btn btn-primary" th:href="@{/account/create-auction}">Create new auction</a>
+    </div>
+    <div class="card m-5" th:each="auction: ${auctions}">
+        <div class="card-body">
+            <h3 class="card-title"><a th:text="${auction.title}" th:href="@{/account/auction/{id}(id=${auction.id})}"></a></h3>
+            <h4 class="card-text" th:text="${auction.description} ?: 'Has no description'"></h4>
+            <p class="card-text">Category: <a th:text="${auction.category.name}" th:href="@{/category/{name}(name=${auction.category.name})}"></a></p>
+            <h5 class="card-text">Last bid submission time: <span th:text="${#dates.format(auction.expirationTime, 'HH:mm dd MMM yyyy')}"></span></h5>
+            <div th:switch="${auction.auctionStatus.name}">
+                <h5 class="card-text" th:case="'CLOSED'">CLOSED</h5>
+                <h5 class="card-text" th:case="*"><a th:href="@{/account/edit-auction/{id}(id=${auction.id})}">Edit</a></h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row"><h1>Account bids:</h1></div>
+    <div class="card m-5" th:each="bid: ${bids}">
+        <div class="card-body">
+            <h3 class="card-title" th:text="${bid.amount}"></h3>
+            <div th:switch="${bid.bidStatus.name}">
+                <h5 class="card-text" th:case="'ACTIVE'">Bid created: <a th:href="@{/auction/{id}(id=${bid.auctionId})}" th:text="${bid.bidStatus.name}"></a></h5>
+                <h5 class="card-text" th:case="*">Bid Status: <span th:text="${bid.bidStatus.name}"></span></h5>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

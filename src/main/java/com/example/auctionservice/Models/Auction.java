@@ -1,16 +1,21 @@
 package com.example.auctionservice.Models;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 public class Auction {
     private long id = 0;
     private String title = "";
     private String description = "";
+    private BigDecimal startingPrice;
     private AuctionStatus auctionStatus;
 
     private Category category;
+    private long userId;
 
     private Instant expirationTime;
+    private Instant updatedTime;
+    private Instant createdTime;
 
     public void setId(long id) {
         this.id = id;
@@ -36,6 +41,14 @@ public class Auction {
         return description;
     }
 
+    public BigDecimal getStartingPrice() {
+        return startingPrice;
+    }
+
+    public void setStartingPrice(BigDecimal startingPrice) {
+        this.startingPrice = startingPrice;
+    }
+
     public AuctionStatus getAuctionStatus() {
         return auctionStatus;
     }
@@ -52,11 +65,35 @@ public class Auction {
         this.category = category;
     }
 
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
     public Instant getExpirationTime() {
         return expirationTime;
     }
 
     public void setExpirationTime(Instant expirationTime) {
         this.expirationTime = expirationTime;
+    }
+
+    public Instant getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(Instant updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
+    public Instant getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Instant createdTime) {
+        this.createdTime = createdTime;
     }
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${auction.title}">Auction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div th:replace="fragments/auction :: auction-info"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div sec:authorize="isAuthenticated()">
+                <div th:switch="${currentUser.id}">
+                    <div th:case="${auctionOwner.id}"><h3>You cannot make a bid on your own auction</h3></div>
+                    <div th:case="*">
+                        <h3>Make bid:</h3>
+                        <p>Your current account balance: <span th:text="${currentUser.balance}"></span></p>
+                        <form method="post" th:action="@{/auction/{id}/makebid (id=${auction.id})}">
+                            <label for="amount">Amount:</label>
+                            <br>
+                            <input id="amount" name="amount" th:type="number" th:value="${minimalBid}" step="0.01" required>
+                            <button class="btn btn-primary" type="submit">Make bid</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div sec:authorize="isAnonymous()">
+                <h3>Log in to make a bid</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/auction :: bidCards"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

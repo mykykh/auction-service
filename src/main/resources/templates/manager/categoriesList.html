@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Categories list</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+  <div class="card m-5 col-12 col-md-4">
+    <div class="card-body">
+      <form method="post" th:action="@{/manager/category/create-category}">
+        <p>
+          <label for="categoryName">Category name:</label>
+          <br>
+          <input type="text" id="categoryName" name="name" required>
+        </p>
+        <button class="btn btn-primary" type="submit">Create new category</button>
+      </form>
+    </div>
+  </div>
+  <div class="card m-5 col-12 col-md-4" th:each="category: ${categories}">
+    <div class="card-body">
+      <h3 class="card-title" th:text="${category.name}"></h3>
+      <div th:switch="${category.id}">
+        <div th:case="*{1}"><button disabled class="btn btn-danger">Delete category</button></div>
+        <div th:case="*">
+          <form method="post" th:action="@{/manager/category/delete-category}">
+            <label>
+              <input type="text" name="id" th:value="${category.id}" hidden>
+            </label>
+            <button class="btn btn-danger">Delete category</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

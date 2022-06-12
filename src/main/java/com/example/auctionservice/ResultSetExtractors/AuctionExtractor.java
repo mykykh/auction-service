@@ -23,9 +23,13 @@ public class AuctionExtractor implements ResultSetExtractor<List<Auction>> {
             auction.setId(rs.getLong("auction_id"));
             auction.setTitle(rs.getString("auction_title"));
             auction.setDescription(rs.getString("auction_description"));
+            auction.setStartingPrice(rs.getBigDecimal("starting_price"));
             auction.setAuctionStatus(new AuctionStatus(rs.getLong("status_id"), rs.getString("status_name")));
             auction.setCategory(new Category(rs.getLong("category_id"), rs.getString("category_name")));
+            auction.setUserId(rs.getLong("user_id"));
             auction.setExpirationTime(rs.getTimestamp("expiration_time", Calendar.getInstance(TimeZone.getTimeZone("UTC"))).toInstant());
+            auction.setUpdatedTime(rs.getTimestamp("updated_time", Calendar.getInstance(TimeZone.getTimeZone("UTC"))).toInstant());
+            auction.setCreatedTime(rs.getTimestamp("created_time", Calendar.getInstance(TimeZone.getTimeZone("UTC"))).toInstant());
             auctions.add(auction);
         }
         return auctions;

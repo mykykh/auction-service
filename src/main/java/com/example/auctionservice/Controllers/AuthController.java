@@ -1,49 +1,70 @@
 package com.example.auctionservice.Controllers;
 
-import com.example.auctionservice.Configs.SecurityUserDetailsService;
-import com.example.auctionservice.Models.User;
-import com.example.auctionservice.Repositories.RoleRepository;
+import com.example.auctionservice.DTOs.User.CreateUserDTO;
+import com.example.auctionservice.Models.Role;
+import com.example.auctionservice.Services.UserService;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import java.util.Collections;
+import java.util.Optional;
 
 @Controller
 public class AuthController {
-    final private String DEFAULT_ROLE = "ROLE_USER";
-    final SecurityUserDetailsService userDetailsManager;
-    final PasswordEncoder passwordEncoder;
-    final RoleRepository roleRepository;
+    final private String DEFAULT_ROLE = "USER";
+    final private String USER_EXISTS_ERROR = "user-exists";
+    final private String PASSWORD_LENGTH_ERROR = "password-length";
+    final private String ROLE_NOT_FOUND_ERROR = "role-not-found";
+    final private UserService userService;
 
-    public AuthController(RoleRepository roleRepository, SecurityUserDetailsService userDetailsManager, PasswordEncoder passwordEncoder) {
-        this.roleRepository = roleRepository;
-        this.userDetailsManager = userDetailsManager;
-        this.passwordEncoder = passwordEncoder;
+    public AuthController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/signup")
-    public String postSignUp(@RequestParam String username, @RequestParam String password) {
-        User user = new User();
+    public ModelAndView postSignUp(@RequestParam String username, @RequestParam String password, ModelMap model) {
+        if (username.length() < 1){
+            return new ModelAndView("redirect:/account");
+        }
+        if (password.length() < 8){
+            model.addAttribute("error", PASSWORD_LENGTH_ERROR);
+            return new ModelAndView("redirect:/signup", model);
+        }
+        if (userService.isUserWithNameExists(username)) {
+            model.addAttribute("error", USER_EXISTS_ERROR);
+            return new ModelAndView("redirect:/signup", model);
+        }
 
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRoles(Collections.singleton(roleRepository.findByName(DEFAULT_ROLE)
-                .orElseThrow(() -> new UsernameNotFoundException("Role not found"))));
+        Optional<Role> defaultRole = userService.findRoleByName(DEFAULT_ROLE);
+        if (defaultRole.isEmpty()){
+            model.addAttribute("error", ROLE_NOT_FOUND_ERROR);
+            return new ModelAndView("redirect:/signup", model);
+        }
+
+        CreateUserDTO createUserDTO = new CreateUserDTO(username, password, Collections.singleton(defaultRole.get()), true);
 
         try {
-            userDetailsManager.createUser(user);
+            userService.createUser(createUserDTO);
         }catch (DuplicateKeyException e){
-
+            model.addAttribute("error", USER_EXISTS_ERROR);
+            return new ModelAndView("redirect:/signup", model);
         }
-        return "signUp";
+
+        return new ModelAndView("redirect:/login");
     }
 
     @GetMapping("/signup")
-    public String getSignUp(){
-        return "signUp";
+    public ModelAndView getSignUp(){
+        return new ModelAndView("signUp");
+    }
+
+    @GetMapping("/login")
+    public ModelAndView getLogin(){
+        return new ModelAndView("logIn");
     }
 }
