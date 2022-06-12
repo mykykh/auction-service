@@ -1,5 +1,7 @@
 package com.example.auctionservice.Models;
 
+import java.time.Instant;
+
 public class Auction {
     private long id = 0;
     private String title = "";
@@ -7,6 +9,8 @@ public class Auction {
     private AuctionStatus auctionStatus;
 
     private Category category;
+
+    private Instant expirationTime;
 
     public void setId(long id) {
         this.id = id;
@@ -46,5 +50,13 @@ public class Auction {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Instant getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(Instant expirationTime) {
+        this.expirationTime = expirationTime;
     }
 }

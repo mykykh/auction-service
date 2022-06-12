@@ -9,7 +9,9 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class AuctionExtractor implements ResultSetExtractor<List<Auction>> {
     @Override
@@ -23,6 +25,7 @@ public class AuctionExtractor implements ResultSetExtractor<List<Auction>> {
             auction.setDescription(rs.getString("auction_description"));
             auction.setAuctionStatus(new AuctionStatus(rs.getLong("status_id"), rs.getString("status_name")));
             auction.setCategory(new Category(rs.getLong("category_id"), rs.getString("category_name")));
+            auction.setExpirationTime(rs.getTimestamp("expiration_time", Calendar.getInstance(TimeZone.getTimeZone("UTC"))).toInstant());
             auctions.add(auction);
         }
         return auctions;
